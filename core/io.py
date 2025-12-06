@@ -52,3 +52,18 @@ def output_summary(data: List[Dict[str, Any]]) -> None:
     print("Columns:")
     for col in data[0].keys():
         print(f" - {col}")
+
+
+def save_csv(data: List[Dict[str, Any]], file_path: str) -> None:
+    if not data:
+        print("No data to save.")
+        return
+    
+    try:
+        with open(file_path, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=data[0].keys())
+            writer.writeheader()
+            writer.writerows(data)
+        print(f"Data saved to '{file_path}' successfully.")
+    except Exception as e:
+        print(f"Error saving file: {e}")

@@ -1,10 +1,12 @@
 from typing import List, Dict, Any
+from imperative_impl.cleaning import DataCleaner
+from imperative_impl.transformation import DataTransformer
 
 def run_pipeline(config, dataset) -> List[Dict[str, Any]]:
-    # Placeholder implementation of the data pipeline runner.
-    # In a real scenario, this function would process the dataset
-    # according to the provided configuration.
-    print("Running data pipeline with the following configuration:")
-    print(config)
-    # For demonstration, just return the original dataset
+    cleaner = DataCleaner(dataset, config)
+    cleaner.clean()
+
+    transformer = DataTransformer(dataset, config)
+    transformer.transform()
+
     return dataset
