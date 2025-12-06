@@ -26,7 +26,7 @@ def main():
     if dataset or not len(dataset) == 0:
         config = main_menu(dataset)
         print(config)
-        output = run_pipeline(config, dataset)
+        output, analyzing_report, aggregation = run_pipeline(config, dataset)
         if config.get('output') == "Save to CSV":
             output_path = dataset_path.rsplit('/', 1)[0] + '/' + dataset_path.rsplit('/', 1)[1].rsplit('.', 1)[0] + '_output.' + dataset_path.rsplit('.', 1)[1]
             save_csv(output, output_path)
