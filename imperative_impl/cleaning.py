@@ -93,4 +93,21 @@ class DataCleaner:
         result = result.replace('dd', day_fmt).replace('d', day_fmt)
 
         return dt.strftime(result)
+    
+    def _standardize_numerical_precision(self) -> None:
+        """Round numerical values to specified precision."""
+        if 'numeric_precision' not in self.config or self.config['numeric_precision'] is None:
+            return
+
+        precision = self.config['numeric_precision']
+        num_cols = [col for col, dtype in self.col_types.items() if dtype == 'number']
+
+        for row in self.data:
+            for col in num_cols:
+                if col in row:
+                    try:
+                        val = float(row[col])
+                        row[col] = round(val, precision)
+                    except Exception:
+                        pass
 
