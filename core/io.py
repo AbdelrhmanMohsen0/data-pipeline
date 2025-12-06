@@ -53,6 +53,61 @@ def output_summary(data: List[Dict[str, Any]]) -> None:
     for col in data[0].keys():
         print(f" - {col}")
 
+def output_analysis(report: Dict[str, Any]) -> None:
+    """Pretty-print the analysis report returned by `run_pipeline`.
+
+    Expected report format (as produced by `imperative_impl.DataAnalyzer.analyze`):
+      {
+          'mean': {col: value, ...},
+          'median': {col: value, ...},
+          'variance': {col: value, ...},
+          'trend': {'YYYY-MM': aggregated_value, ...}
+      }
+
+    The function prints each section in a readable, sorted order.
+    """
+    if not report:
+        print("No analysis report to display.")
+        return
+
+    print("Analysis Report:")
+
+    # Helper to print numeric maps
+    def _print_map(title: str, mapping: Dict[str, Any], fmt_number: bool = True):
+        print(f"\n{title}:")
+        if not mapping:
+            print("  (no data)")
+            return
+        for key in sorted(mapping.keys()):
+            val = mapping[key]
+            if fmt_number and isinstance(val, (int, float)):
+                # choose reasonable formatting
+                if isinstance(val, int) or abs(val) >= 1:
+                    out = f"{val:.4f}" if isinstance(val, float) else f"{val}"
+                else:
+                    out = f"{val:.6f}"
+            else:
+                out = str(val)
+            print(f"  - {key}: {out}")
+
+    # Print known sections in a predictable order
+    for section in ("mean", "median", "variance"):
+        if section in report:
+            _print_map(section.capitalize(), report.get(section, {}))
+
+    # Trend is typically a time series (YYYY-MM -> value)
+    if "trend" in report:
+        trend = report.get("trend", {}) or {}
+        print("\nTrend (monthly):")
+        if not trend:
+            print("  (no trend data)")
+        else:
+            for month in sorted(trend.keys()):
+                val = trend[month]
+                print(f"  - {month}: {val:.4f}" if isinstance(val, (int, float)) else f"  - {month}: {val}")
+
+
+
 
 def save_csv(data: List[Dict[str, Any]], file_path: str) -> None:
     if not data:

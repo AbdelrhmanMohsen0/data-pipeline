@@ -1,5 +1,5 @@
 import argparse
-from core.io import load_csv, load_json, output_summary
+from core.io import load_csv, load_json, output_summary, output_analysis
 from core.cli_menu import main_menu
 from imperative_impl.runner import run_pipeline
 from core.io import save_csv
@@ -27,6 +27,7 @@ def main():
         config = main_menu(dataset)
         print(config)
         output, analyzing_report, aggregation = run_pipeline(config, dataset)
+        output_analysis(analyzing_report)
         if config.get('output') == "Save to CSV":
             output_path = dataset_path.rsplit('/', 1)[0] + '/' + dataset_path.rsplit('/', 1)[1].rsplit('.', 1)[0] + '_output.' + dataset_path.rsplit('.', 1)[1]
             save_csv(output, output_path)
