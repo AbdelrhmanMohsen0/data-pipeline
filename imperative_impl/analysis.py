@@ -1,3 +1,4 @@
+from typing import Any
 
 
 class DataAnalyzer:
@@ -8,10 +9,10 @@ class DataAnalyzer:
         if not self.data:
             return {}
 
-        summary: dict[str, dict[str, any]] = {
+        summary: dict[str, dict[str, Any]] = {
             'mean': self._calculate_mean(),
             'median': self._calculate_median(),
-            'variance': self.calculate_variance(),
+            'variance': self._calculate_variance(),
             'trend': self._monthly_trend('Sale_Date', 'Sales_Amount'),
         }
 
@@ -55,7 +56,7 @@ class DataAnalyzer:
         
         return medians
     
-    def calculate_variance(self):
+    def _calculate_variance(self):
         if not self.data:
             return {}
 
