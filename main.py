@@ -1,7 +1,7 @@
 import argparse
 from core.io import load_csv, load_json, output_summary, output_analysis
 from core.cli_menu import main_menu
-from imperative_impl.runner import run_pipeline
+from functional_impl.runner import run_pipeline
 from core.io import save_csv
 
 def main():
