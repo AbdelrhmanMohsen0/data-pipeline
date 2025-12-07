@@ -31,11 +31,11 @@ class DataCleaner:
                     if value in (None, ""):
                         col_type = self.col_types.get(col, 'string')
                         if col_type == 'number':
-                            row[col] = col_means.get(col, self._calc_col_mean(col))
+                            row[col] = col_means.setdefault(col, self._calc_col_mean(col))
                         elif col_type == 'date':
-                            row[col] = col_modes.get(col, self._calc_col_mode(col))
+                            row[col] = col_modes.setdefault(col, self._calc_col_mode(col))
                         else:
-                            row[col] = col_modes.get(col, self._calc_col_mode(col))
+                            row[col] = col_modes.setdefault(col, self._calc_col_mode(col))
 
     def _standardize_dates(self) -> None:
         """Standardize date format according to config."""
