@@ -90,19 +90,41 @@ class DataAnalyzer:
         return variances
     
     def _monthly_trend(self, date_col, value_col):
-        trend = {}  # { "YYYY-MM" : sum }
+        
+        if not self.data:
+            return {}
 
+        monthly_sales = {}
+        
         for row in self.data:
             date = row.get(date_col)
             value = row.get(value_col)
-
+            
             if not isinstance(value, (int, float)):
                 continue
 
-            # expects date format YYYY-MM-DD
             if isinstance(date, str) and len(date) >= 7:
-                month = date[:7]  # "YYYY-MM"
-                trend[month] = trend.get(month, 0) + value
-
+                month = date[:7] 
+                monthly_sales[month] = monthly_sales.get(month, 0) + value
+        
+        if not monthly_sales:
+            return {}
+        
+        sorted_months = sorted(monthly_sales.keys())
+        trend = {}
+        
+        for i in range(1, len(sorted_months)):
+            current_month = sorted_months[i]
+            previous_month = sorted_months[i - 1]
+            
+            current_sales = monthly_sales[current_month]
+            previous_sales = monthly_sales[previous_month]
+            
+            if previous_sales == 0:
+                continue
+            
+            percentage_change = ((current_sales - previous_sales) / previous_sales) * 100
+            trend[current_month] = percentage_change
+        
         return trend
 
